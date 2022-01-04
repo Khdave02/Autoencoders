@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
 
-import loader # module for loading dataset and dataloader
+import loader  # module for loading dataset and dataloader
+import costGraph  # module to plot cost graph of train & test losses
 import torch
 import torch.nn as nn
 import matplotlib.pyplot as plt
 import numpy as np
 import torch.nn.functional as F
-import costGraph # module to plot cost graph of train & test losses
-from tqdm import tqdm # for showing progess bars during training and testing
+
+from tqdm import tqdm  # for showing progess bars during training and testing
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-FILE = 'denoising_model.pth' # Path where the model is saved
+FILE = 'denoising_model.pth'  # Path where the model is saved
 
 seed = 42  # seed is used to ensure that we get the same output every time
 torch.manual_seed(seed)
@@ -39,6 +40,7 @@ class AE_CNN(nn.Module):
     '''
         CNN model for the autoencoder
     '''
+
     def __init__(self):
         super(AE_CNN, self).__init__()
         # N, 1, 28, 28
@@ -159,12 +161,14 @@ def view_images(outputs):
             plt.imshow(noisy_imgs[i].reshape(28, 28), cmap="gray")
             plt.xticks([])
             plt.yticks([])  # removing axes
+            ax.set_title('Noisy')
 
             ax = plt.subplot(2, num, i + 1 + num)
             plt.imshow(recon[i].reshape(28, 28), cmap="gray")
             # plotting the ith test image in subplot
             plt.xticks([])
             plt.yticks([])  # removing axes
+            ax.set_title('Denoised')
         plt.show()
 
 
@@ -200,7 +204,7 @@ def main():
     # test the trained model on Test data
     view_images(test_op)
 
-    #save the model to the specified path
+    # save the model to the specified path
     torch.save(model.state_dict(), FILE)
 
 
