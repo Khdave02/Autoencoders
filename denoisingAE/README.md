@@ -33,12 +33,28 @@ The [MNIST](http://yann.lecun.com/exdb/mnist/) and [Fashion MNIST](https://githu
 ## Adding Noise
 * ```torch.randn``` is used to create a noisy tensor of the same size as the input. The amount of Gaussian noise can be changed by changing the multiplication factor.
  
- ![](https://i.imgur.com/xeT9wzT.png)
 
 
 ## Architecture 
 
 ```   python
+       self.encoder = nn.Sequential(
+            nn.Conv2d(1, 16, 3, stride=2, padding=1),  # -> N, 16, 14, 14
+            nn.ReLU(),
+            nn.Conv2d(16, 32, 3, stride=2, padding=1),  # -> N, 32, 7, 7
+            nn.ReLU(),
+            nn.Conv2d(32, 64, 7)  # -> N, 64, 1, 1
+        )
+
+        # N , 64, 1, 1
+        self.decoder = nn.Sequential(
+            nn.ConvTranspose2d(64, 32, 7),  # -> N, 32, 7, 7
+            nn.ReLU(),
+            nn.ConvTranspose2d(32, 16, 3, stride=2, padding=1, output_padding=1),  # N, 16, 14, 14 (N,16,13,13 without output_padding)
+            nn.ReLU(),
+            nn.ConvTranspose2d(16, 1, 3, stride=2, padding=1, output_padding=1),  # N, 1, 28, 28  (N,1,27,27)
+            nn.Sigmoid()  # img pixel values ranges from 0-1 so sigmoid used for final activation
+        )
       
         
  ```
