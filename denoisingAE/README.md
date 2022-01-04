@@ -9,7 +9,7 @@ The [MNIST](http://yann.lecun.com/exdb/mnist/) dataset is used. The dataset cont
 
  
 
-![](https://storage.googleapis.com/tfds-data/visualization/fig/mnist-3.0.1.png)
+![mnistDataset](https://user-images.githubusercontent.com/83291620/148073005-2fe02f47-a02c-4fec-ba5e-e43457b2ef78.png)
 
 
 
