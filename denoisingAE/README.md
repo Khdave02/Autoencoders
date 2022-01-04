@@ -5,11 +5,11 @@ Implementation of Image-Denoising Autoencoder on MNIST by using Pytorch and CNN
 
 
 ## MNIST-Dataset
-The [MNIST](http://yann.lecun.com/exdb/mnist/) dataset is used. The dataset contains 60,000 training samples and 10,000 test samples. Each sample in the MNIST dataset is a 28x28 pixel grayscale image of a single handwritten digit between 0 & 9,
+The [MNIST](http://yann.lecun.com/exdb/mnist/) dataset is used. The dataset contains 60,000 training samples and 10,000 test samples. Each sample in the MNIST dataset is a 28x28 pixel grayscale image of a single handwritten digit between 0 & 9.
 
  
 
-![](https://i.imgur.com/FhAVzAp.png)
+![](https://storage.googleapis.com/tfds-data/visualization/fig/mnist-3.0.1.png)
 
 
 
