@@ -81,7 +81,7 @@ def training(model, dataloader, opt, criterion, train_outputs, epoch):
         criterion: MSE loss function to be used for training
         train_outputs: list containing per epoch results(input & output) obtained after training
         epoch: current epoch
-        Returns: list containing the train loss per epoch
+        Returns: train loss per epoch
     '''
     print('Training')
     running_loss = 0.0
@@ -116,7 +116,7 @@ def testing(model, dataloader, criterion, test_op, epoch):
             criterion: MSE loss function to be used for testing
             test_outputs: list containing per epoch results(input & output) obtained after testing
             epoch: current epoch
-            Returns: list containing the test loss per epoch
+            Returns: test loss per epoch
     '''
     print('Testing')
     model.eval()
