@@ -5,11 +5,11 @@ Implementation of Image-Denoising Autoencoder on MNIST by using Pytorch and CNN
 
 
 ## MNIST-Dataset
-The [MNIST](http://yann.lecun.com/exdb/mnist/) and [Fashion MNIST](https://github.com/zalandoresearch/fashion-mnist) datasets are used. These datasets contain 60,000 training samples and 10,000 test samples. Each sample in the MNIST dataset is a 28x28 pixel grayscale image of a single handwritten digit between 0 & 9, whereas each sample in the Fashion MNIST dataset is a 28x28 grayscale image associated with a label from 10 types of clothing.
+The [MNIST](http://yann.lecun.com/exdb/mnist/) dataset is used. The dataset contains 60,000 training samples and 10,000 test samples. Each sample in the MNIST dataset is a 28x28 pixel grayscale image of a single handwritten digit between 0 & 9.
 
  
 
-![](https://i.imgur.com/FhAVzAp.png)
+![mnistDataset](https://user-images.githubusercontent.com/83291620/148073577-ac3e4e3d-382a-4616-be4e-48e72a0aaf88.png)
 
 
 
@@ -23,15 +23,15 @@ The [MNIST](http://yann.lecun.com/exdb/mnist/) and [Fashion MNIST](https://githu
 
 | Hyperparaeter |value          |
 | ------------- | ------------- |
-| Batch-Size    | 64            |
-| Learning-rate | 0.001         |
+| Batch-Size    | 600           |
+| Learning-rate | 5x0.001       |
 | Weight-decay  | 0.00001       |
 | num of Epochs | 10            |
 |  Loss         |  MSE LOSS     |
 |  Optimizer    | Adam Optimizer|
 
 ## Adding Noise
-* ```torch.randn``` is used to create a noisy tensor of the same size as the input. The amount of Gaussian noise can be changed by changing the multiplication factor.
+* ```torch.randn``` is used to create a noisy tensor of the same size as the input. The amount of Gaussian noise can be changed by changing the multiplied noise factor.
  
 
 
