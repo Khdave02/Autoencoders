@@ -8,13 +8,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import torch.nn.functional as F
 
-from tqdm import tqdm  # for showing progess bars during training and testing
+from tqdm import tqdm  # for showing progress bars during training and testing
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-FILE = 'denoising_model.pth'  # Path where the model is saved
+FILE = 'denoising_model.pth'  # Path where the model is saved/loaded
 
-seed = 42  # seed is used to ensure that we get the same output every time
+seed = 1  # seed is used to ensure that we get the same output every time
 torch.manual_seed(seed)
 
 # set the hyperparameters values
@@ -81,7 +81,6 @@ def training(model, dataloader, opt, criterion, train_outputs, epoch):
     Returns: train loss per epoch
     '''
     print('Training')
-    # costs=[]
     running_loss = 0.0
     for (img, labels) in tqdm(dataloader):
         noisy_img = add_noise(img, noise_f)
@@ -132,7 +131,7 @@ def view_images(outputs):
     This function displays the result images
     :param outputs: list containing per epoch results(input & output) obtained after training/testing
     '''
-    for k in range(0, num_epochs, 4):  # printing results after every 4 epochs
+    for k in range(0, num_epochs, 3):  # printing results after every 3 epochs
         plt.figure(figsize=(18, 5))
         plt.gray()
         og_imgs = outputs[k][1]
@@ -142,7 +141,7 @@ def view_images(outputs):
         og_imgs = og_imgs.detach().numpy()
         recon = outputs[k][2].cpu().detach().numpy()
 
-        num = 10  # no. of images for a row
+        num = 10  # no. of images in a row
 
         # plot the original images first
         plt.figure(figsize=(18, 5))
@@ -165,7 +164,6 @@ def view_images(outputs):
 
             ax = plt.subplot(2, num, i + 1 + num)
             plt.imshow(recon[i].reshape(28, 28), cmap="gray")
-            # plotting the ith test image in subplot
             plt.xticks([])
             plt.yticks([])  # removing axes
             ax.set_title('Denoised')
@@ -185,27 +183,35 @@ def main():
 
     opt = torch.optim.Adam(params, lr=alpha, betas=(0.9, 0.999), eps=1e-08, weight_decay=1e-5)
 
-    # training and testing
     train_loss = []
     test_loss = []
     train_outputs = []
     test_op = []
-    for epoch in range(num_epochs):
-        print(f"Epoch {epoch + 1}")
-        train_epoch_loss = training(model, train_loader, opt, criterion, train_outputs, epoch)
-        test_epoch_loss = testing(model, test_loader, criterion, test_op, epoch)
-        print(f"Train Loss: {train_epoch_loss} \t Test Loss: {test_epoch_loss}")
-        train_loss.append(train_epoch_loss)
-        test_loss.append(test_epoch_loss)
 
-    # plot the cost graph
-    costGraph.plot_cost(train_loss, test_loss, title="Denoising AE")
+    ch = input("Press l to load model, t to train model: ").lower()  # asks user if they want to train the model or load the already saved model
+    if ch == 'l':
+        model.load_state_dict(torch.load(FILE))  # loads the model
+        for epoch in range(num_epochs):
+            print(f"Epoch {epoch + 1}")
+            test_epoch_loss = testing(model, test_loader, criterion, test_op, epoch)
+            print(f"Test Loss: {test_epoch_loss}")
+            test_loss.append(test_epoch_loss)
+
+    elif ch == 't':
+        # training and testing
+        for epoch in range(num_epochs):
+            print(f"Epoch {epoch + 1}")
+            train_epoch_loss = training(model, train_loader, opt, criterion, train_outputs, epoch)
+            test_epoch_loss = testing(model, test_loader, criterion, test_op, epoch)
+            print(f"Train Loss: {train_epoch_loss} \t Test Loss: {test_epoch_loss}")
+            train_loss.append(train_epoch_loss)
+            test_loss.append(test_epoch_loss)
+        # plot the cost graph
+        costGraph.plot_cost(train_loss, test_loss, title="Denoising AE")
+        torch.save(model.state_dict(), FILE)  # saves the trained model at the specified path
 
     # test the trained model on Test data
     view_images(test_op)
-
-    # save the model to the specified path
-    torch.save(model.state_dict(), FILE)
 
 
 main()

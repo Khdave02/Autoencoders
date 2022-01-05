@@ -1,17 +1,13 @@
 # -*- coding: utf-8 -*-
 
-import loader
-import costGraph
+import loader   # module for loading dataset and dataloader
+import costGraph    # module to plot cost graph of train & test losses
 import torch
 import torch.nn as nn
-import torchvision
-from torchvision import datasets, transforms
-from torch.utils.data import Dataset
-from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
 import numpy as np
 import torch.nn.functional as F
-from tqdm import tqdm
+from tqdm import tqdm   # for showing progress bars during training and testing
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
@@ -19,6 +15,7 @@ seed = 1  # seed is used to ensure that we get the same output every time
 torch.manual_seed(seed)
 
 # set hyperparameter values
+FILE = 'CAE_model.pth'  # Path where the model is saved/loaded
 batch_size = 600
 num_epochs = 10
 alpha = 1e-3  # learning rate
@@ -26,6 +23,9 @@ lamda = 1e-4
 
 
 class CAE_CNN(nn.Module):
+    '''
+            CNN model for the autoencoder
+    '''
     def __init__(self):
         super(CAE_CNN, self).__init__()
         # encoding layers
@@ -41,12 +41,11 @@ class CAE_CNN(nn.Module):
     # forward prop function
     def forward(self, x):
         # encoder
-        # ret_val=[]
-        # ret_weight = []
         x = F.relu(self.conv1(x))
         x = F.relu(self.conv2(x))
         x = F.relu(self.conv3(x))
 
+        # decoder
         x = F.relu(self.tconv1(x))
         x = F.relu(self.tconv2(x))
         x = torch.sigmoid(self.tconv3(x))  # final layer is applied sigmoid activation
@@ -55,6 +54,9 @@ class CAE_CNN(nn.Module):
 
 
 def contractive_loss(model):
+    '''
+    This function calculates the contractive loss
+    '''
     c_loss = 0
     for i in range(len(model.state_dict()) // 4):
         name = 'conv' + str(i + 1)
@@ -70,8 +72,18 @@ def contractive_loss(model):
 
 
 def training(model, dataloader, opt, criterion, train_outputs, epoch):
+    '''
+        This function trains the Neural Network.
+        Parameters-
+        model: CNN AutoEncoder model
+        dataloader: DataLoader object that iterates through the train set
+        opt: optimizer object to be used for training
+        criterion: MSE loss function to be used for training
+        train_outputs: list containing per epoch results(input & output) obtained after training
+        epoch: current epoch
+        Returns: list containing the train loss per epoch
+    '''
     print('Training')
-    # costs=[]
     running_loss = 0.0
     for (img, labels) in tqdm(dataloader):
         img = img.to(device)
@@ -80,6 +92,7 @@ def training(model, dataloader, opt, criterion, train_outputs, epoch):
         # forward
         recon = model(img.float())
 
+        #calculate loss
         mse_loss = criterion(recon, img)
         penalty = contractive_loss(model)
         loss = mse_loss + penalty * lamda
@@ -95,18 +108,24 @@ def training(model, dataloader, opt, criterion, train_outputs, epoch):
 
 
 def testing(model, dataloader, criterion, test_op, epoch):
+    '''
+            This function tests the trained model
+            Parameters-
+            model: CNN AutoEncoder model
+            dataloader: DataLoader object that iterates through the test set
+            criterion: MSE loss function to be used for testing
+            test_outputs: list containing per epoch results(input & output) obtained after testing
+            epoch: current epoch
+            Returns: list containing the test loss per epoch
+    '''
     print('Testing')
     model.eval()
     running_loss = 0.0
     with torch.no_grad():
         for (img, _) in tqdm(dataloader):
-            # counter += 1
+
             img = img.to(device)
             recon = model(img).to(device)
-
-            # mse_loss = criterion(recon, img)
-            # penalty = contractive_loss(model)
-            # loss = mse_loss + penalty * lamda
             loss = criterion(recon, img)
 
             running_loss += loss.item()
@@ -116,18 +135,22 @@ def testing(model, dataloader, criterion, test_op, epoch):
 
 
 def view_images(outputs):
-    for k in range(0, num_epochs, 3):
+    '''
+       This function displays the result images
+       :param outputs: list containing per epoch results(input & output) obtained after training/testing
+       '''
+    for k in range(0, num_epochs, 3):   # printing results after every 3 epochs
         plt.figure(figsize=(18, 5))
         plt.gray()
         og_imgs = outputs[k][1]
 
         og_imgs = og_imgs.cpu().detach().numpy()
         recon = outputs[k][2].cpu().detach().numpy()
-        # print("Epoch: ",k)
-        num = 10  # no. of images for a row
+
+        num = 10  # no. of images in a row
 
         # plots 10 input images and their reconstructed result
-        plt.figure(figsize=(20, 5))
+        plt.figure(figsize=(18, 5))
         plt.suptitle("Epoch: %i" % (k + 1))
         for i in range(num):
             ax = plt.subplot(2, num, i + 1)
@@ -138,45 +161,54 @@ def view_images(outputs):
 
             ax = plt.subplot(2, num, i + 1 + num)
             plt.imshow(recon[i].reshape(28, 28), cmap="gray")
-            # plotting the ith test image in subplot
             plt.xticks([])
             plt.yticks([])  # removing axes
-            ax.set_title('Reconstructed')
+            ax.set_title('Contractive')
         plt.show()
 
 
 def main():
+    '''
+        This is the main function of the code
+        '''
     train_loader = loader.trainLoader(batch_size)
     test_loader = loader.testLoader(batch_size)
 
-    # load model
     model = CAE_CNN().to(device)
-
     params = model.parameters()
     criterion = nn.MSELoss()
     opt = torch.optim.Adam(params, lr=alpha, betas=(0.9, 0.999), eps=1e-08)
 
-    # training
     train_loss = []
     test_loss = []
     train_outputs = []
     test_op = []
-    for epoch in range(num_epochs):
-        print(f"Epoch {epoch + 1}")
-        train_epoch_loss = training(model, train_loader, opt, criterion, train_outputs, epoch)
-        test_epoch_loss = testing(model, test_loader, criterion, test_op, epoch)
-        print(f"Train Loss: {train_epoch_loss} \t Test Loss: {test_epoch_loss}")
-        train_loss.append(train_epoch_loss)
-        test_loss.append(test_epoch_loss)
 
-    costGraph.plot_cost(train_loss, test_loss, title="Contractive AE")
+    ch = input("Press l to load model, t to train model: ").lower()  # asks user if they want to train the model or load the already saved model
+    if ch == 'l':
+        model.load_state_dict(torch.load(FILE))  # loads the model
+        for epoch in range(num_epochs):
+            print(f"Epoch {epoch + 1}")
+            test_epoch_loss = testing(model, test_loader, criterion, test_op, epoch)
+            print(f"Test Loss: {test_epoch_loss}")
+            test_loss.append(test_epoch_loss)
 
-    # test the trained model on Test data
+    elif ch == 't':
+        # training and testing
+        for epoch in range(num_epochs):
+            print(f"Epoch {epoch + 1}")
+            train_epoch_loss = training(model, train_loader, opt, criterion, train_outputs, epoch)
+            test_epoch_loss = testing(model, test_loader, criterion, test_op, epoch)
+            print(f"Train Loss: {train_epoch_loss} \t Test Loss: {test_epoch_loss}")
+            train_loss.append(train_epoch_loss)
+            test_loss.append(test_epoch_loss)
+        # plot the cost graph
+        costGraph.plot_cost(train_loss, test_loss, title="Contractive AE")
+        torch.save(model.state_dict(), FILE)  # saves the trained model at the specified path
+
+    # test the trained/saved model on the Test data
     view_images(test_op)
-
-    FILE = 'CAE_model.pth'
-    torch.save(model.state_dict(), FILE)
-    # files.download('CAE_model.pth')
 
 
 main()
+
