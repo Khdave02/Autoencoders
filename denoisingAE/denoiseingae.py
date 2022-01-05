@@ -191,6 +191,7 @@ def main():
     ch = input("Press l to load model, t to train model: ").lower()  # asks user if they want to train the model or load the already saved model
     if ch == 'l':
         model.load_state_dict(torch.load(FILE))  # loads the model
+        # test the loaded model on the test data
         for epoch in range(num_epochs):
             print(f"Epoch {epoch + 1}")
             test_epoch_loss = testing(model, test_loader, criterion, test_op, epoch)
@@ -210,7 +211,7 @@ def main():
         costGraph.plot_cost(train_loss, test_loss, title="Denoising AE")
         torch.save(model.state_dict(), FILE)  # saves the trained model at the specified path
 
-    # test the trained model on Test data
+    # view the output images obtained after testing
     view_images(test_op)
 
 
