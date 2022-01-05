@@ -68,7 +68,8 @@ In denoising autoencoder some noise is introduced to the input images. The encod
 
 
 ## Results and Outputs
-![Screenshot 2022-01-04 191527](https://user-images.githubusercontent.com/87975841/148068286-963d691c-9c8b-4f2a-a3af-5f07c508778e.png)
+![result](https://user-images.githubusercontent.com/83291620/148183354-c54bd206-0b3b-4428-a814-d97650dd831d.png)
+
 
 
 
