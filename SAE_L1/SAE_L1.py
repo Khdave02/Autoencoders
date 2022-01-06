@@ -99,7 +99,7 @@ def testing(model,testloader,test_output,epoch,criterion):
     return loss
 def cost_graph(loss_list,title):
     plt.plot(loss_list)
-    plt.ylabel('cost')
+    plt.ylabel('loss')
     plt.xlabel('epochs')
     plt.title(title)
     plt.show()
