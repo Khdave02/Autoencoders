@@ -58,7 +58,7 @@ The [MNIST](http://yann.lecun.com/exdb/mnist/) dataset is used. The dataset cont
       
         
  ```
-## Training with flowchart
+## Process
 
 
 In denoising autoencoder some noise is introduced to the input images. The encoder network downsamples the data into a lower-dimensional latent space and then the decoder reconstructs the original data from the lower-dimensional representation. MSE loss between the original image and the reconstructed image is calculated and is backpropagated. Value of the parameters is updated using Adam optimization to reduce the reconstruction error.
