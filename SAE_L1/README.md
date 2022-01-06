@@ -30,8 +30,7 @@ Here, λ is the regularization parameter, and wis are the activation weights. We
 | num of Epochs  | 10            |
 |  Loss          | MSE LOSS      |
 |  Optimizer     | Adam Optimizer|
-|  beta          | 0.005         |
-|  rho           | 0.01          |
+|lamda         | 0.0001         |
 
 
 ## Architecture 
