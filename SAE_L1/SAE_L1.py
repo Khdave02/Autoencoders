@@ -142,10 +142,10 @@ def main():
         test_loss_list.append(test_loss)
         print("epoch : {}/{}, recon loss = {:.8f}".format(epoch + 1, num_epochs, test_loss))
 
-    cost_graph(train_loss_list,title="CAE Train graph")
+    cost_graph(train_loss_list,title="SAE Train graph")
     view_images(train_output,num_epochs)
     
-    cost_graph(test_loss_list,title="CAE Test graph")
+    cost_graph(test_loss_list,title="SAE Test graph")
     view_images(test_output,num_epochs)
     FILE = "SAE_L1_model.pth"  #path where model is saved
     torch.save(model, FILE)
