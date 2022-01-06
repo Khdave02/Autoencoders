@@ -17,7 +17,7 @@ L1 sparsity constraint is added to the activations of the neuron after the ReLU 
 
 ![Screenshot 2022-01-06 185917](https://user-images.githubusercontent.com/87975841/148390492-43342f5b-8bb5-429d-bdd1-6a06b2bf7e2f.png)
 
-Here, λ is the regularization parameter, and wis are the activation weights. We will add this regularization to the loss function i.e MSELoss.
+Here, λ is the regularization parameter, and wi are the activation weights. We will add this regularization to the loss function i.e MSELoss.
 ![Screenshot 2022-01-06 183047](https://user-images.githubusercontent.com/87975841/148390451-d9bcdb02-3861-4df9-9e21-b05536a3d9b3.png)
 
 ## Hyperparameters
