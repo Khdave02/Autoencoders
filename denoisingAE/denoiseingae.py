@@ -7,7 +7,6 @@ import torch.nn as nn
 import matplotlib.pyplot as plt
 import numpy as np
 import torch.nn.functional as F
-
 from tqdm import tqdm  # for showing progress bars during training and testing
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'

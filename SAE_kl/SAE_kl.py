@@ -14,9 +14,9 @@ test_loader = loader.testLoader(600)
 lr =1e-3
 num_epochs=10
 class SparseAutoencoder(nn.Module):
-    ```
-     Sparse AE model 
-   ```
+    '''
+    Sparse AE model
+    '''
     def __init__(self):
         super().__init__()
         self.enc1 = nn.Conv2d(1, 16, 3, stride=2, padding=1)  # -> N, 16, 14, 14

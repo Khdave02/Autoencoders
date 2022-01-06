@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 def plot_cost(train_loss, test_loss, title):
     '''
     This function plots the loss graph of the test and train losses
-    rain_loss: train loss per epoch
+    train_loss: train loss per epoch
     test_loss: test loss per epoch
     title: title for the graph
     '''
