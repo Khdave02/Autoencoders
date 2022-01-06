@@ -2,9 +2,11 @@
 Contractive Autoencoder is another unsupervised deep learning technique that makes an autoencoder robust of small changes to the training dataset.
 
 To achieve this goal, a penalty term is added to the loss function that penalizes representations being too sensitive towards the training input data. The sensitivity is measured by the Frobenius norm of the Jacobian matrix of the encoder activations with respect to the input:
--img
+![frobenious_norm](https://user-images.githubusercontent.com/83291620/148352415-cb467e1e-8a28-4af7-928f-fa9e50f645e1.png)
+
 Hence the loss is as follows:
--img
+![CAE_loss](https://user-images.githubusercontent.com/83291620/148352452-b1c797b4-6ffb-4c02-953b-2f44fede9aff.png)
+
 
 ---
 ## Hyperparameters used
@@ -33,7 +35,8 @@ Hence the loss is as follows:
 ```
 ## Result and Outputs
 ### Loss vs No. of Epochs graph
--img
+![CAE_graph](https://user-images.githubusercontent.com/83291620/148352488-c9d2b692-c641-41ee-9869-8d38c7a9e996.png)
+
 
 After 10 epochs, The training and testing losses were:
 
@@ -44,7 +47,8 @@ After 10 epochs, The training and testing losses were:
 
 
 ### Outputs 
--img
+![output](https://user-images.githubusercontent.com/83291620/148352564-d5e2bd27-8171-4de1-a61f-4c112edf65b4.png)
+
 
 
 ---
