@@ -57,11 +57,20 @@ where s is the number of neurons in the hidden layer.
  ```
 
 ## Loss plots of Epochs
-![Screenshot 2022-01-05 213250](https://user-images.githubusercontent.com/87975841/148249131-44c25179-8506-4ac9-a8b0-1239bce1733b.png)
+![Screenshot 2022-01-06 193156](https://user-images.githubusercontent.com/87975841/148394491-a5b7fdc2-cd00-497a-b3aa-06d4220ee719.png)
 
 
 ## Results and Outputs
-![train_output](https://user-images.githubusercontent.com/87975841/148247639-0449fe2c-634f-4ce4-9f05-a287981fa215.png)
+
+   |Type            |Loss           |           
+   | -------------  | ------------- |     
+   |Training Loss   | 0.00618275    |
+   |Testing Loss    | 0.00054436    |
+   
+   
+Results on Test Set:-
+![test_output](https://user-images.githubusercontent.com/87975841/148397071-844ba792-37af-4f63-a247-09c6f2faf63f.png)
+
 
 
 
