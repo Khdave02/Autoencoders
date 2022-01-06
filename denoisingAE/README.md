@@ -21,7 +21,7 @@ The [MNIST](http://yann.lecun.com/exdb/mnist/) dataset is used. The dataset cont
 
 ## Hyperparameters
 
-| Hyperparaeter |value          |
+| Hyperparameter |value          |
 | ------------- | ------------- |
 | Batch-Size    | 600           |
 | Learning-rate | 5x0.001       |

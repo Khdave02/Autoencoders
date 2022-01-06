@@ -14,8 +14,9 @@ device = 'cuda' if torch.cuda.is_available() else 'cpu'
 seed = 1  # seed is used to ensure that we get the same output every time
 torch.manual_seed(seed)
 
-# set hyperparameter values
 FILE = 'CAE_model.pth'  # Path where the model is saved/loaded
+
+# set hyperparameter values
 batch_size = 600
 num_epochs = 10
 alpha = 1e-3  # learning rate
